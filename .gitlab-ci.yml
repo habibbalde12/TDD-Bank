@@ -12,7 +12,7 @@ before_script:
 build:
   stage: build
   script:
-    - gradle --build-cache assemble
+    - gradle --build-cache build
     - echo $CI_BUILD_PATH
     - echo $CI_PROJECT_DIR
   cache:
