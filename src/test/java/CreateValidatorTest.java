@@ -14,38 +14,38 @@ public class CreateValidatorTest {
     }
 
     @Test
-    void validCreateCommand() {
+    void valid_create_command() {
         String[] cmd = {"create", "savings", "12345678", "0.5"};
         assertTrue(validator.validate(cmd));
     }
 
     @Test
-    void invalidAccountTypeFails() {
+    void invalid_account_type_fails() {
         String[] cmd = {"create", "cd", "12345678", "0.5"};
         assertFalse(validator.validate(cmd));
     }
 
     @Test
-    void invalidAccountNumberFails() {
+    void invalid_account_number_fails() {
         String[] cmd = {"create", "savings", "abc45678", "0.5"};
         assertFalse(validator.validate(cmd));
     }
 
     @Test
-    void invalidInterestRateFails() {
+    void invalid_interest_rate_fails() {
         String[] cmd = {"create", "savings", "12345678", "1.2"};
         assertFalse(validator.validate(cmd));
     }
 
     @Test
-    void duplicateAccountFails() {
+    void duplicate_account_fails() {
         bank.addAccount(new Savings("12345678", 0.5));
         String[] cmd = {"create", "savings", "12345678", "0.5"};
         assertFalse(validator.validate(cmd));
     }
 
     @Test
-    void wrongTokenCountFails() {
+    void wrong_token_count_fails() {
         String[] cmd = {"create", "savings", "12345678"};
         assertFalse(validator.validate(cmd));
     }

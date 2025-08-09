@@ -14,42 +14,43 @@ public class CommandValidatorTest {
     }
 
     @Test
-    void validCreateCommand() {
+    void valid_create_command() {
         assertTrue(validator.validate("create savings 12345678 0.4"));
     }
 
     @Test
-    void validDepositCommand() {
+    void valid_deposit_command() {
         bank.addAccount(new Savings("12345678", 0.4));
         assertTrue(validator.validate("deposit 12345678 200"));
     }
 
     @Test
-    void unknownCommandFails() {
+    void unknown_command_fails() {
         assertFalse(validator.validate("delete 12345678"));
     }
 
     @Test
-    void depositToNonexistentAccountFails() {
+    void deposit_to_nonexistent_account_fails() {
         assertFalse(validator.validate("deposit 12345678 100"));
     }
 
     @Test
-    void duplicateCreateFails() {
+    void duplicate_create_fails() {
         bank.addAccount(new Savings("12345678", 0.3));
         assertFalse(validator.validate("create savings 12345678 0.3"));
     }
 
     @Test
-    void emptyCommandFails() {
+    void empty_command_fails() {
         assertFalse(validator.validate(""));
     }
 
     @Test
-    void nullCommandFails() {
-        assertFalse(validator.validate(null));
+    void null_command_fails() {
+        assertFalse(validator.validate((String) null));
     }
 }
+
 
 
 
