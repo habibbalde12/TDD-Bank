@@ -4,7 +4,6 @@ public class DepositValidator extends CommandValidator {
         super(bank);
     }
 
-    // Used by DepositValidatorTest
     public boolean validate(String[] tokens) {
         if (tokens == null || tokens.length != 3)
             return false;

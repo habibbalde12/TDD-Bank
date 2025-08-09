@@ -24,7 +24,6 @@ public class CommandProcess {
     }
 
     private void handleCreate(String[] tokens) {
-        // expected: create <type> <id> <apr>
         String type = tokens[1];
         String id = tokens[2];
         double apr = Double.parseDouble(tokens[3]);
