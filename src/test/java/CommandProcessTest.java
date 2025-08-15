@@ -50,3 +50,4 @@ public class CommandProcessTest {
         assertNull(possiblyCreatedAccount);
     }
 }
+
