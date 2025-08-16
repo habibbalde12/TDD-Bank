@@ -1,3 +1,6 @@
+package banking;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,7 +10,7 @@ public class AccountTest {
     void deposit_increases_balance() {
         Account account = new Checkings("12345678", 9.1);
         account.deposit(45.67);
-        assertEquals(45.67, account.getBalance());
+        Assertions.assertEquals(45.67, account.getBalance());
     }
 
     @Test
@@ -15,7 +18,7 @@ public class AccountTest {
         Account account = new Checkings("12345678", 9.1);
         account.deposit(100);
         account.withdraw(23.44);
-        assertEquals(76.56, account.getBalance());
+        Assertions.assertEquals(76.56, account.getBalance());
     }
 
     @Test
@@ -23,7 +26,7 @@ public class AccountTest {
         Account account = new Checkings("00000000", 9.1);
         account.deposit(50);
         account.withdraw(75);
-        assertEquals(0, account.getBalance());
+        Assertions.assertEquals(0, account.getBalance());
     }
 
     @Test
@@ -31,7 +34,7 @@ public class AccountTest {
         Account account = new Checkings("12345678", 9.1);
         account.deposit(10);
         account.deposit(88.88);
-        assertEquals(98.88, account.getBalance());
+        Assertions.assertEquals(98.88, account.getBalance());
     }
 
     @Test
@@ -40,6 +43,6 @@ public class AccountTest {
         account.deposit(100);
         account.withdraw(20);
         account.withdraw(30);
-        assertEquals(50, account.getBalance());
+        Assertions.assertEquals(50, account.getBalance());
     }
 }
