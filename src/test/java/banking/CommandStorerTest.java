@@ -1,6 +1,8 @@
+package banking;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class CommandStorerTest {
     @Test
@@ -9,9 +11,9 @@ public class CommandStorerTest {
         commandStorer.storeInvalid("creat checking 12345678 1.0");
         commandStorer.storeInvalid("depositt 12345678 100");
         List<String> actualInvalidCommands = commandStorer.getInvalid();
-        assertEquals(2, actualInvalidCommands.size());
-        assertEquals("creat checking 12345678 1.0", actualInvalidCommands.get(0));
-        assertEquals("depositt 12345678 100", actualInvalidCommands.get(1));
+        Assertions.assertEquals(2, actualInvalidCommands.size());
+        Assertions.assertEquals("creat checking 12345678 1.0", actualInvalidCommands.get(0));
+        Assertions.assertEquals("depositt 12345678 100", actualInvalidCommands.get(1));
     }
 
     @Test
@@ -21,8 +23,8 @@ public class CommandStorerTest {
         List<String> firstCopy = commandStorer.getInvalid();
         firstCopy.add("should_not_affect_internal_list");
         List<String> secondCopy = commandStorer.getInvalid();
-        assertEquals(1, secondCopy.size());
-        assertEquals("command_one", secondCopy.get(0));
+        Assertions.assertEquals(1, secondCopy.size());
+        Assertions.assertEquals("command_one", secondCopy.get(0));
     }
 
     @Test
@@ -31,6 +33,6 @@ public class CommandStorerTest {
         commandStorer.storeInvalid("bad_command");
         commandStorer.clear();
         List<String> afterClear = commandStorer.getInvalid();
-        assertTrue(afterClear.isEmpty());
+        Assertions.assertTrue(afterClear.isEmpty());
     }
 }

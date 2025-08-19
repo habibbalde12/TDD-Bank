@@ -1,3 +1,5 @@
+package banking;
+
 public class DepositCommandProcess extends CommandProcess {
     public DepositCommandProcess(Bank bank) {
         super(bank, false);
