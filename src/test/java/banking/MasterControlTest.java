@@ -1,6 +1,5 @@
 package banking;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
@@ -17,14 +16,15 @@ public class MasterControlTest {
         Bank bank = new Bank();
         CommandValidator createValidator = new CreateValidator(bank);
         CommandValidator depositValidator = new DepositValidator(bank);
+        CommandValidator withdrawValidator = new WithdrawCommandValidator(bank);
         CommandProcess commandProcess = new CommandProcess(bank);
         CommandStorer commandStorer = new CommandStorer();
-        masterControl = new MasterControl(createValidator, depositValidator, commandProcess, commandStorer);
+        masterControl = new MasterControl(createValidator, depositValidator, withdrawValidator, commandProcess, commandStorer);
     }
 
     private void assertSingleCommand(String command, List<String> actual) {
-        Assertions.assertEquals(1, actual.size());
-        Assertions.assertEquals(command, actual.get(0));
+        assertEquals(1, actual.size());
+        assertEquals(command, actual.get(0));
     }
 
     @Test
@@ -46,9 +46,9 @@ public class MasterControlTest {
         input.add("creat checking 12345678 1.0");
         input.add("depositt 12345678 100");
         List<String> actual = masterControl.start(input);
-        Assertions.assertEquals(2, actual.size());
-        Assertions.assertEquals("creat checking 12345678 1.0", actual.get(0));
-        Assertions.assertEquals("depositt 12345678 100", actual.get(1));
+        assertEquals(2, actual.size());
+        assertEquals("creat checking 12345678 1.0", actual.get(0));
+        assertEquals("depositt 12345678 100", actual.get(1));
     }
 
     @Test

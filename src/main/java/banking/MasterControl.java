@@ -11,36 +11,34 @@ public class MasterControl {
 
     public MasterControl(CommandValidator createValidator,
                          CommandValidator depositValidator,
+                         CommandValidator withdrawValidator,
                          CommandProcess commandProcess,
                          CommandStorer commandStorer) {
-        this.validators = new ArrayList<>(Arrays.asList(createValidator, depositValidator));
+        this.validators = new ArrayList<>(Arrays.asList(createValidator, depositValidator, withdrawValidator));
         this.commandProcess = commandProcess;
         this.commandStorer = commandStorer;
     }
 
     public List<String> start(List<String> input) {
         commandStorer.clear();
-        if (input == null) return commandStorer.getInvalid();
-
+        if (input == null) {
+            return commandStorer.getInvalid();
+        }
         for (String line : input) {
             boolean valid = false;
-
-
             for (CommandValidator v : validators) {
                 if (v.validate(line)) {
                     valid = true;
                     break;
                 }
             }
-
             if (!valid) {
                 commandStorer.storeInvalid(line);
                 continue;
             }
-
-
             commandProcess.process(line);
         }
         return commandStorer.getInvalid();
     }
 }
+
