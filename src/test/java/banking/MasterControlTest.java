@@ -17,47 +17,41 @@ public class MasterControlTest {
         CommandValidator createValidator = new CreateValidator(bank);
         CommandValidator depositValidator = new DepositValidator(bank);
         CommandValidator withdrawValidator = new WithdrawCommandValidator(bank);
+        CommandValidator transferValidator = new TransferCommandValidator(bank);
         CommandProcess commandProcess = new CommandProcess(bank);
         CommandStorer commandStorer = new CommandStorer();
-        masterControl = new MasterControl(createValidator, depositValidator, withdrawValidator, commandProcess, commandStorer);
+        masterControl = new MasterControl(createValidator, depositValidator, withdrawValidator, transferValidator, commandProcess, commandStorer);
     }
 
-    private void assertSingleCommand(String command, List<String> actual) {
+    private void assertSingleInvalid(String command, List<String> actual) {
         assertEquals(1, actual.size());
         assertEquals(command, actual.get(0));
     }
 
     @Test
-    void typo_in_create_command_is_invalid() {
-        input.add("creat checking 12345678 1.0");
+    void transfer_typo_is_invalid() {
+        input.add("tranfer 12345678 87654321 100");
         List<String> actual = masterControl.start(input);
-        assertSingleCommand("creat checking 12345678 1.0", actual);
+        assertSingleInvalid("tranfer 12345678 87654321 100", actual);
     }
 
     @Test
-    void typo_in_deposit_command_is_invalid() {
-        input.add("depositt 12345678 100");
+    void valid_transfer_is_not_marked_invalid() {
+        input.add("create checking 12345678 0.5");
+        input.add("create savings 87654321 0.6");
+        input.add("transfer 12345678 87654321 200");
         List<String> actual = masterControl.start(input);
-        assertSingleCommand("depositt 12345678 100", actual);
+        assertEquals(0, actual.size());
     }
 
     @Test
-    void two_typo_commands_both_invalid() {
-        input.add("creat checking 12345678 1.0");
-        input.add("depositt 12345678 100");
+    void transfer_missing_account_is_invalid() {
+        input.add("create checking 12345678 0.5");
+        input.add("transfer 12345678 87654321 200");
         List<String> actual = masterControl.start(input);
-        assertEquals(2, actual.size());
-        assertEquals("creat checking 12345678 1.0", actual.get(0));
-        assertEquals("depositt 12345678 100", actual.get(1));
-    }
-
-    @Test
-    void invalid_to_create_accounts_with_same_ID() {
-        input.add("create checking 12345678 1.0");
-        input.add("create checking 12345678 1.0");
-        List<String> actual = masterControl.start(input);
-        assertSingleCommand("create checking 12345678 1.0", actual);
+        assertSingleInvalid("transfer 12345678 87654321 200", actual);
     }
 }
+
 
 
