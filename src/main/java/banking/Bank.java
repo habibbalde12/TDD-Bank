@@ -31,4 +31,32 @@ public class Bank {
     public int getAccountCount() {
         return accounts.size();
     }
+
+    public void transfer(String fromId, String toId, double amount) {
+        if (fromId == null || toId == null) {
+            return;
+        }
+        if (fromId.equals(toId)) {
+            return;
+        }
+        Account from = getAccount(fromId);
+        Account to = getAccount(toId);
+        if (from == null || to == null) {
+            return;
+        }
+        if (amount <= 0.0) {
+            return;
+        }
+
+        double available = from.getBalance();
+        double move = amount <= available ? amount : available;
+
+        if (move <= 0.0) {
+            return;
+        }
+
+        withdraw(fromId, move);
+        deposit(toId, move);
+    }
+
 }

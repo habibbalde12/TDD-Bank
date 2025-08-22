@@ -74,4 +74,93 @@ public class BankTest {
         bank.withdraw("83472619", 30);
         Assertions.assertEquals(45, checkings.getBalance());
     }
+    @Test
+    void transfer_decreases_from_and_increases_to() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.addAccount(new Savings("87654321", 1.0));
+        bank.deposit("12345678", 500.0);
+        bank.deposit("87654321", 200.0);
+
+        bank.transfer("12345678", "87654321", 150.0);
+
+        assertEquals(350.0, bank.getAccount("12345678").getBalance(), 0.0001);
+        assertEquals(350.0, bank.getAccount("87654321").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_more_than_available_moves_only_available() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.addAccount(new Savings("87654321", 1.0));
+        bank.deposit("12345678", 80.0);
+        bank.deposit("87654321", 20.0);
+
+        bank.transfer("12345678", "87654321", 200.0);
+
+        assertEquals(0.0, bank.getAccount("12345678").getBalance(), 0.0001);
+        assertEquals(100.0, bank.getAccount("87654321").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_same_account_no_change() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.deposit("12345678", 300.0);
+
+        bank.transfer("12345678", "12345678", 50.0);
+
+        assertEquals(300.0, bank.getAccount("12345678").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_missing_from_account_no_change() {
+        Bank bank = new Bank();
+        bank.addAccount(new Savings("87654321", 1.0));
+        bank.deposit("87654321", 100.0);
+
+        bank.transfer("12345678", "87654321", 50.0);
+
+        assertEquals(100.0, bank.getAccount("87654321").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_missing_to_account_no_change() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.deposit("12345678", 120.0);
+
+        bank.transfer("12345678", "87654321", 50.0);
+
+        assertEquals(120.0, bank.getAccount("12345678").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_zero_amount_no_change() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.addAccount(new Savings("87654321", 1.0));
+        bank.deposit("12345678", 200.0);
+        bank.deposit("87654321", 50.0);
+
+        bank.transfer("12345678", "87654321", 0.0);
+
+        assertEquals(200.0, bank.getAccount("12345678").getBalance(), 0.0001);
+        assertEquals(50.0, bank.getAccount("87654321").getBalance(), 0.0001);
+    }
+
+    @Test
+    void transfer_negative_amount_no_change() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 1.0));
+        bank.addAccount(new Savings("87654321", 1.0));
+        bank.deposit("12345678", 200.0);
+        bank.deposit("87654321", 50.0);
+
+        bank.transfer("12345678", "87654321", -25.0);
+
+        assertEquals(200.0, bank.getAccount("12345678").getBalance(), 0.0001);
+        assertEquals(50.0, bank.getAccount("87654321").getBalance(), 0.0001);
+    }
+
 }
