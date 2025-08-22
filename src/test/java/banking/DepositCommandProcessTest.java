@@ -29,3 +29,5 @@ public class DepositCommandProcessTest {
         Assertions.assertEquals(500.0, updatedAccount.getBalance(), 0.0001);
     }
 }
+
+

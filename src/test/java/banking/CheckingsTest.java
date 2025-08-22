@@ -18,3 +18,4 @@ public class CheckingsTest {
         Assertions.assertEquals(2.7, checkings.getApr());
     }
 }
+

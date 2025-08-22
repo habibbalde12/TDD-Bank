@@ -40,3 +40,5 @@ public class CreateCommandProcessTest {
         Assertions.assertEquals(2.0, createdAccount.getApr(), 0.0001);
     }
 }
+
+

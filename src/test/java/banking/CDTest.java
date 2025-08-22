@@ -18,3 +18,4 @@ public class CDTest {
         Assertions.assertEquals(5.4, cd.getApr());
     }
 }
+

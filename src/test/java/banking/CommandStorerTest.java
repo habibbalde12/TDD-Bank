@@ -36,3 +36,5 @@ public class CommandStorerTest {
         Assertions.assertTrue(afterClear.isEmpty());
     }
 }
+
+

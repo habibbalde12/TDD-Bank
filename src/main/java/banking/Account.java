@@ -31,3 +31,4 @@ public abstract class Account {
 		balance = Math.max(0.0, balance - amount);
 	}
 }
+

@@ -86,3 +86,5 @@ public class TransferCommandValidatorTest {
         assertFalse(transferValidator.validate((String[]) null));
     }
 }
+
+

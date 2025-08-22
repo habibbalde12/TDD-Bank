@@ -51,3 +51,5 @@ public class TransferCommandProcessTest {
         assertEquals(300.0, bankInstance.getAccount("87654321").getBalance(), 0.0001);
     }
 }
+
+

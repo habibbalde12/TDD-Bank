@@ -21,3 +21,5 @@ public class TransferCommandProcess extends CommandProcess {
         bank.transfer(fromId, toId, amount);
     }
 }
+
+

@@ -6,3 +6,4 @@ public class CD extends Account {
         this.balance = initialBalance;
     }
 }
+
