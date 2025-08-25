@@ -1,5 +1,6 @@
 package banking;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,9 @@ public class Bank {
 
     public Account getAccount(String id) {
         return accounts.get(id);
+    }
+    public Map<String, Account> getAccounts() {
+        return Collections.unmodifiableMap(accounts);
     }
 
     public void deposit(String id, double amount) {
@@ -58,7 +62,22 @@ public class Bank {
         withdraw(fromId, move);
         deposit(toId, move);
     }
+    public void passTime(int months) {
+        if (months <= 0) {
+            return;
+        }
 
+        for (Account a : accounts.values()) {
+            double balance = a.getBalance();
+            double monthlyRate = a.getApr() / 12.0;
+            double interest = balance * monthlyRate * months;
+            double rounded = Math.round(interest * 100.0) / 100.0;
+            if (rounded > 0.0) {
+                a.deposit(rounded);
+            }
+        }
+    }
 
 }
+
 
