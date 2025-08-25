@@ -13,9 +13,10 @@ public class MasterControl {
                          CommandValidator depositValidator,
                          CommandValidator withdrawValidator,
                          CommandValidator transferValidator,
+                         CommandValidator passTimeValidator,
                          CommandProcess commandProcess,
                          CommandStorer commandStorer) {
-        this.validators = new ArrayList<>(Arrays.asList(createValidator, depositValidator, withdrawValidator, transferValidator));
+        this.validators = new ArrayList<>(Arrays.asList(createValidator, depositValidator, withdrawValidator, transferValidator, passTimeValidator));
         this.commandProcess = commandProcess;
         this.commandStorer = commandStorer;
     }
@@ -41,9 +42,8 @@ public class MasterControl {
         }
         return commandStorer.getInvalid();
     }
-
-
 }
+
 
 
 
