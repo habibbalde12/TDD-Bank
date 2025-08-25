@@ -7,20 +7,31 @@ public class CreateCommandProcess extends CommandProcess {
 
     @Override
     public boolean supports(String commandType) {
-        return "create".equals(commandType);
+        if ("create".equalsIgnoreCase(commandType)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void processTokens(String[] tokens) {
-        String accountType = tokens[1];
-        String accountIdentifier = tokens[2];
-        double annualPercentageRate = Double.parseDouble(tokens[3]);
-        if ("checking".equals(accountType)) {
-            bank.addAccount(new Checkings(accountIdentifier, annualPercentageRate));
-        } else if ("savings".equals(accountType)) {
-            bank.addAccount(new Savings(accountIdentifier, annualPercentageRate));
+        String type = tokens[1].toLowerCase();
+        String id = tokens[2];
+        double apr = Double.parseDouble(tokens[3]);
+
+        if (type.equals("checking")) {
+            bank.addAccount(new Checkings(id, apr));
+            return;
+        }
+        if (type.equals("savings")) {
+            bank.addAccount(new Savings(id, apr));
+            return;
+        }
+        if (type.equals("cd")) {
+            double open = Double.parseDouble(tokens[4]);
+            bank.addAccount(new CD(id, apr, open));
+            return;
         }
     }
 }
-
 
