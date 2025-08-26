@@ -2,15 +2,12 @@ package banking;
 
 public class TransferCommandProcess extends CommandProcess {
     public TransferCommandProcess(Bank bank) {
-        super(bank);
+        super(bank, false);
     }
 
     @Override
     public boolean supports(String commandType) {
-        if ("transfer".equalsIgnoreCase(commandType)) {
-            return true;
-        }
-        return false;
+        return "transfer".equalsIgnoreCase(commandType);
     }
 
     @Override
@@ -21,5 +18,4 @@ public class TransferCommandProcess extends CommandProcess {
         bank.transfer(fromId, toId, amount);
     }
 }
-
 

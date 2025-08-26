@@ -2,15 +2,12 @@ package banking;
 
 public class PassTimeCommandProcess extends CommandProcess {
     public PassTimeCommandProcess(Bank bank) {
-        super(bank);
+        super(bank, false);
     }
 
     @Override
     public boolean supports(String commandType) {
-        if ("pass".equalsIgnoreCase(commandType)) {
-            return true;
-        }
-        return false;
+        return "pass".equalsIgnoreCase(commandType);
     }
 
     @Override
@@ -19,3 +16,4 @@ public class PassTimeCommandProcess extends CommandProcess {
         bank.passTime(months);
     }
 }
+

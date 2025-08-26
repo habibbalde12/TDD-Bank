@@ -2,27 +2,20 @@ package banking;
 
 public class WithdrawCommandProcess extends CommandProcess {
     public WithdrawCommandProcess(Bank bank) {
-        super(bank);
+        super(bank, false);
     }
 
     @Override
     public boolean supports(String commandType) {
-        if ("withdraw".equalsIgnoreCase(commandType)) {
-            return true;
-        }
-        return false;
+        return "withdraw".equalsIgnoreCase(commandType);
     }
 
     @Override
     public void processTokens(String[] tokens) {
         String id = tokens[1];
-        String amountRaw = tokens[2];
-        double amount = Double.parseDouble(amountRaw);
+        double amount = Double.parseDouble(tokens[2]);
         bank.withdraw(id, amount);
     }
 }
-
-
-
 
 
