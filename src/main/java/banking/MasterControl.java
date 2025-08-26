@@ -1,24 +1,22 @@
 package banking;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MasterControl {
-    private final List<CommandValidator> validators;
+    private final Bank bank;
+    private final CommandStorer commandStorer = new CommandStorer();
+    private final List<CommandValidator> validators = new ArrayList<>();
     private final CommandProcess commandProcess;
-    private final CommandStorer commandStorer;
 
-    public MasterControl(CommandValidator createValidator,
-                         CommandValidator depositValidator,
-                         CommandValidator withdrawValidator,
-                         CommandValidator transferValidator,
-                         CommandValidator passTimeValidator,
-                         CommandProcess commandProcess,
-                         CommandStorer commandStorer) {
-        this.validators = new ArrayList<>(Arrays.asList(createValidator, depositValidator, withdrawValidator, transferValidator, passTimeValidator));
-        this.commandProcess = commandProcess;
-        this.commandStorer = commandStorer;
+    public MasterControl(Bank bank) {
+        this.bank = bank;
+        validators.add(new CreateValidator(bank));
+        validators.add(new DepositValidator(bank));
+        validators.add(new WithdrawCommandValidator(bank));
+        validators.add(new TransferCommandValidator(bank));
+        validators.add(new PassTimeCommandValidator(bank));
+        this.commandProcess = new CommandProcess(bank);
     }
 
     public List<String> start(List<String> input) {
@@ -27,25 +25,25 @@ public class MasterControl {
             return commandStorer.getInvalid();
         }
         for (String line : input) {
+            if (line == null || line.isBlank()) {
+                continue;
+            }
+            String trimmed = line.trim();
+            String[] tokens = trimmed.split("\\s+");
+            String commandType = tokens[0].toLowerCase();
             boolean valid = false;
             for (CommandValidator v : validators) {
-                if (v.validate(line)) {
+                if (v.supports(commandType) && v.validate(tokens)) {
                     valid = true;
                     break;
                 }
             }
             if (!valid) {
-                commandStorer.storeInvalid(line);
+                commandStorer.storeInvalid(trimmed);
                 continue;
             }
-            commandProcess.process(line);
+            commandProcess.process(trimmed);
         }
         return commandStorer.getInvalid();
     }
 }
-
-
-
-
-
-

@@ -7,10 +7,7 @@ public class CreateCommandProcess extends CommandProcess {
 
     @Override
     public boolean supports(String commandType) {
-        if ("create".equalsIgnoreCase(commandType)) {
-            return true;
-        }
-        return false;
+        return "create".equalsIgnoreCase(commandType);
     }
 
     @Override
@@ -18,7 +15,6 @@ public class CreateCommandProcess extends CommandProcess {
         String type = tokens[1].toLowerCase();
         String id = tokens[2];
         double apr = Double.parseDouble(tokens[3]);
-
         if (type.equals("checking")) {
             bank.addAccount(new Checkings(id, apr));
             return;
@@ -30,8 +26,6 @@ public class CreateCommandProcess extends CommandProcess {
         if (type.equals("cd")) {
             double open = Double.parseDouble(tokens[4]);
             bank.addAccount(new CD(id, apr, open));
-            return;
         }
     }
 }
-

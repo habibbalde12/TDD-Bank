@@ -24,11 +24,16 @@ public abstract class Account {
 	}
 
 	public void deposit(double amount) {
+		if (amount <= 0) return;
 		balance += amount;
 	}
 
 	public void withdraw(double amount) {
+		if (amount <= 0) return;
 		balance = Math.max(0.0, balance - amount);
 	}
-}
 
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
+}

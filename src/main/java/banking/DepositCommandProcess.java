@@ -7,7 +7,7 @@ public class DepositCommandProcess extends CommandProcess {
 
     @Override
     public boolean supports(String commandType) {
-        return "deposit".equals(commandType);
+        return "deposit".equalsIgnoreCase(commandType);
     }
 
     @Override
