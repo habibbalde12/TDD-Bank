@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class CreateCommandProcessTest {
     private Bank bankInstance;
     private CreateCommandProcess createCommandProcessInstance;
@@ -16,10 +19,9 @@ public class CreateCommandProcessTest {
 
     @Test
     void supports_create_only() {
-        Assertions.assertTrue(createCommandProcessInstance.supports("create"));
-        Assertions.assertFalse(createCommandProcessInstance.supports("deposit"));
+        assertTrue(createCommandProcessInstance.supports("create"));
+        assertFalse(createCommandProcessInstance.supports("deposit"));
     }
-
 }
 
 

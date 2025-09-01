@@ -3,7 +3,7 @@ package banking;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BankTest {
     @Test
@@ -182,5 +182,35 @@ public class BankTest {
         bank.passTime(-3);
         assertEquals(300.0, bank.getAccount("12345678").getBalance(), 0.0001);
     }
+    @org.junit.jupiter.api.Test
+    void passTime_removes_zero_balance_accounts_before_interest() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("12345678", 0.12));
+        bank.passTime(1);
+        assertNull(bank.getAccount("12345678"));
+    }
+
+    @Test
+    void passTime_simple_interest_HALF_UP_multiple_months() {
+        Bank bank = new Bank();
+        bank.addAccount(new Savings("87654321", 0.06));
+        bank.deposit("87654321", 1000.00);
+        bank.passTime(2);
+        assertEquals(1010.00, bank.getAccount("87654321").getBalance(), 1e-9);
+    }
+
+    @Test
+    void recreate_same_id_after_closure_allowed() {
+        Bank bank = new Bank();
+        bank.addAccount(new Checkings("11112222", 0.01));
+        bank.deposit("11112222", 1.0);
+        bank.withdraw("11112222", 1.0);
+        bank.passTime(1);
+        assertNull(bank.getAccount("11112222"));
+        bank.addAccount(new Savings("11112222", 0.02));
+        assertNotNull(bank.getAccount("11112222"));
+        assertTrue(bank.getHistory("11112222").isEmpty());
+    }
+
 
 }
