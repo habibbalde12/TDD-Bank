@@ -1,4 +1,3 @@
-// WithdrawCommandValidatorTest.java
 package banking;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,6 +51,59 @@ public class WithdrawCommandValidatorTest {
         String[] tokens = {"withdraw", "12345678"};
         assertFalse(withdrawValidator.validate(tokens));
     }
+    @Test
+    void validate_string_null_and_blank_rejected_withdraw() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new Checkings("12345678", 0.01));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertFalse(withdrawValidatorLocal.validate((String) null));
+        assertFalse(withdrawValidatorLocal.validate("  "));
+    }
+
+    @Test
+    void dot_amount_and_signed_amount_invalid() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new Checkings("12345678", 0.01));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertFalse(withdrawValidatorLocal.validate("withdraw 12345678 ."));
+        assertFalse(withdrawValidatorLocal.validate("withdraw 12345678 -0.01"));
+        assertFalse(withdrawValidatorLocal.validate("withdraw 12345678 +5"));
+    }
+
+    @Test
+    void invalid_when_command_type_not_supported_in_validate_array() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new Checkings("12345678", 0.01));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertFalse(withdrawValidatorLocal.validate(new String[]{"withdrew","12345678","10"}));
+    }
+
+    @Test
+    void invalid_when_account_is_cd() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new CD("23456789", 0.02, 2000.0));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertFalse(withdrawValidatorLocal.validate(new String[]{"withdraw","23456789","10"}));
+    }
+
+    @Test
+    void checkings_boundary_400_valid_401_invalid() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new Checkings("12345678", 0.01));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertTrue(withdrawValidatorLocal.validate(new String[]{"withdraw","12345678","400"}));
+        assertFalse(withdrawValidatorLocal.validate(new String[]{"withdraw","12345678","401"}));
+    }
+
+    @Test
+    void savings_boundary_1000_valid_1000_01_invalid() {
+        Bank bankInstanceLocal = new Bank();
+        bankInstanceLocal.addAccount(new Savings("87654321", 0.01));
+        WithdrawCommandValidator withdrawValidatorLocal = new WithdrawCommandValidator(bankInstanceLocal);
+        assertTrue(withdrawValidatorLocal.validate(new String[]{"withdraw","87654321","1000"}));
+        assertFalse(withdrawValidatorLocal.validate(new String[]{"withdraw","87654321","1000.01"}));
+    }
+
 }
 
 

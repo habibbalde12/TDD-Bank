@@ -56,17 +56,46 @@ public class DepositValidatorTest {
         String[] cmd = {"deposit", "12345678"};
         assertFalse(validator.validate(cmd));
     }
-   @Test
+    @Test
     void checking_1000_cap_savings_2500_cap() {
-        Bank bank = new Bank();
-        bank.addAccount(new Checkings("11112222", 0.01));
-        bank.addAccount(new Savings("22223333", 0.01));
-        DepositValidator dv = new DepositValidator(bank);
-        assertTrue(dv.validate(new String[]{"deposit","11112222","1000"}));
-        assertFalse(dv.validate(new String[]{"deposit","11112222","1000.01"}));
-        assertTrue(dv.validate(new String[]{"deposit","22223333","2500"}));
-        assertFalse(dv.validate(new String[]{"deposit","22223333","2500.01"}));
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Checkings("11112222", 0.01));
+        bankInstance.addAccount(new Savings("22223333", 0.01));
+        DepositValidator depositValidatorInstance = new DepositValidator(bankInstance);
+        assertTrue(depositValidatorInstance.validate(new String[]{"deposit","11112222","1000"}));
+        assertFalse(depositValidatorInstance.validate(new String[]{"deposit","11112222","1000.01"}));
+        assertTrue(depositValidatorInstance.validate(new String[]{"deposit","22223333","2500"}));
+        assertFalse(depositValidatorInstance.validate(new String[]{"deposit","22223333","2500.01"}));
     }
+
+    @Test
+    void validate_string_null_blank_and_dot_amount() {
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Checkings("12345678", 0.01));
+        DepositValidator depositValidatorInstance = new DepositValidator(bankInstance);
+        assertFalse(depositValidatorInstance.validate((String) null));
+        assertFalse(depositValidatorInstance.validate("   "));
+        assertFalse(depositValidatorInstance.validate("deposit 12345678 ."));
+    }
+
+    @Test
+    void validate_string_happy_path_deposit() {
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Savings("22223333", 0.01));
+        DepositValidator depositValidatorInstance = new DepositValidator(bankInstance);
+        assertTrue(depositValidatorInstance.validate("deposit 22223333 25"));
+    }
+
+    @Test
+    void amount_with_plus_or_minus_is_invalid() {
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Checkings("12345678", 0.01));
+        DepositValidator depositValidatorInstance = new DepositValidator(bankInstance);
+        assertFalse(depositValidatorInstance.validate(new String[]{"deposit","12345678","+5"}));
+        assertFalse(depositValidatorInstance.validate(new String[]{"deposit","12345678","-0.01"}));
+    }
+
+
 
 }
 

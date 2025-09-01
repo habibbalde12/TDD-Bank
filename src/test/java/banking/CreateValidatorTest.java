@@ -50,14 +50,31 @@ public class CreateValidatorTest {
     }
     @Test
     void validates_id_is_eight_digits_and_apr_0_to_10() {
-        Bank bank = new Bank();
-        CreateValidator v = new CreateValidator(bank);
-        assertFalse(v.validate(new String[]{"create","checking","1234567","1"}));
-        assertFalse(v.validate(new String[]{"create","checking","123456789","1"}));
-        assertFalse(v.validate(new String[]{"create","checking","12345678","-1"}));
-        assertFalse(v.validate(new String[]{"create","checking","12345678","10.01"}));
-        assertTrue(v.validate(new String[]{"create","checking","12345678","0.6"}));
+        Bank bankInstance = new Bank();
+        CreateValidator createValidatorInstance = new CreateValidator(bankInstance);
+        assertFalse(createValidatorInstance.validate(new String[]{"create","checking","1234567","1"}));
+        assertFalse(createValidatorInstance.validate(new String[]{"create","checking","123456789","1"}));
+        assertFalse(createValidatorInstance.validate(new String[]{"create","checking","12345678","-1"}));
+        assertFalse(createValidatorInstance.validate(new String[]{"create","checking","12345678","10.01"}));
+        assertTrue(createValidatorInstance.validate(new String[]{"create","checking","12345678","0.6"}));
     }
+
+    @Test
+    void validate_string_null_and_blank_rejected_create() {
+        Bank bankInstance = new Bank();
+        CreateValidator createValidatorInstance = new CreateValidator(bankInstance);
+        assertFalse(createValidatorInstance.validate((String) null));
+        assertFalse(createValidatorInstance.validate("   "));
+    }
+
+    @Test
+    void validate_string_happy_path_create() {
+        Bank bankInstance = new Bank();
+        CreateValidator createValidatorInstance = new CreateValidator(bankInstance);
+        assertTrue(createValidatorInstance.validate("create checking 12345678 1.5"));
+    }
+
+
 
 }
 

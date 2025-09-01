@@ -85,6 +85,26 @@ public class TransferCommandValidatorTest {
     void invalid_when_tokens_null() {
         assertFalse(transferValidator.validate((String[]) null));
     }
+    @Test
+    void validate_string_null_and_blank_rejected_transfer() {
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Checkings("11112222", 0.01));
+        bankInstance.addAccount(new Savings("22223333", 0.01));
+        TransferCommandValidator transferValidatorInstance = new TransferCommandValidator(bankInstance);
+        assertFalse(transferValidatorInstance.validate((String) null));
+        assertFalse(transferValidatorInstance.validate("   "));
+    }
+
+    @Test
+    void validate_string_happy_path_with_extra_spaces() {
+        Bank bankInstance = new Bank();
+        bankInstance.addAccount(new Checkings("11112222", 0.01));
+        bankInstance.addAccount(new Savings("22223333", 0.01));
+        TransferCommandValidator transferValidatorInstance = new TransferCommandValidator(bankInstance);
+        assertTrue(transferValidatorInstance.validate("transfer    11112222    22223333    10"));
+    }
+
+
 }
 
 

@@ -1,4 +1,3 @@
-// WithdrawCommandProcessTest.java
 package banking;
 
 import org.junit.jupiter.api.BeforeEach;
