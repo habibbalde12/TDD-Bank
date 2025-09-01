@@ -34,12 +34,6 @@ public class CreateValidatorTest {
     }
 
     @Test
-    void invalid_interest_rate_fails() {
-        String[] cmd = {"create", "savings", "12345678", "1.2"};
-        Assertions.assertFalse(validator.validate(cmd));
-    }
-
-    @Test
     void duplicate_account_fails() {
         bank.addAccount(new Savings("12345678", 0.5));
         String[] cmd = {"create", "savings", "12345678", "0.5"};

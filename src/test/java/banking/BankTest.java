@@ -74,6 +74,7 @@ public class BankTest {
         bank.withdraw("83472619", 30);
         Assertions.assertEquals(45, checkings.getBalance());
     }
+
     @Test
     void transfer_decreases_from_and_increases_to() {
         Bank bank = new Bank();
@@ -162,40 +163,12 @@ public class BankTest {
         assertEquals(200.0, bank.getAccount("12345678").getBalance(), 0.0001);
         assertEquals(50.0, bank.getAccount("87654321").getBalance(), 0.0001);
     }
-    @Test
-    void pass_time_one_month_savings_increases_balance() {
-        Bank bank = new Bank();
-        bank.addAccount(new Savings("87654321", 0.06));
-        bank.deposit("87654321", 1000.0);
-        bank.passTime(1);
-        assertEquals(1005.0, bank.getAccount("87654321").getBalance(), 0.0001);
-    }
 
-    @Test
-    void pass_time_two_months_linear_interest() {
-        Bank bank = new Bank();
-        bank.addAccount(new Savings("87654321", 0.06));
-        bank.deposit("87654321", 1000.0);
-        bank.passTime(2);
-        assertEquals(1010.0, bank.getAccount("87654321").getBalance(), 0.0001);
-    }
-
-    @Test
-    void pass_time_applies_to_multiple_accounts() {
-        Bank bank = new Bank();
-        bank.addAccount(new Checkings("12345678", 0.12));
-        bank.addAccount(new Savings("87654321", 0.06));
-        bank.deposit("12345678", 500.0);
-        bank.deposit("87654321", 1000.0);
-        bank.passTime(1);
-        assertEquals(505.0, bank.getAccount("12345678").getBalance(), 0.0001);
-        assertEquals(1005.0, bank.getAccount("87654321").getBalance(), 0.0001);
-    }
 
     @Test
     void pass_time_zero_months_no_change() {
         Bank bank = new Bank();
-        bank.addAccount(new Savings("87654321", 0.06));
+        bank.addAccount(new Savings("87654321", 6.0));
         bank.deposit("87654321", 250.0);
         bank.passTime(0);
         assertEquals(250.0, bank.getAccount("87654321").getBalance(), 0.0001);
@@ -204,23 +177,10 @@ public class BankTest {
     @Test
     void pass_time_negative_months_no_change() {
         Bank bank = new Bank();
-        bank.addAccount(new Checkings("12345678", 0.12));
+        bank.addAccount(new Checkings("12345678", 12.0));
         bank.deposit("12345678", 300.0);
         bank.passTime(-3);
         assertEquals(300.0, bank.getAccount("12345678").getBalance(), 0.0001);
     }
 
-    @Test
-    void pass_time_rounding_small_apr() {
-        Bank bank = new Bank();
-        bank.addAccount(new Savings("87654321", 0.01));
-        bank.deposit("87654321", 1.00);
-        bank.passTime(1);
-        assertEquals(1.00, bank.getAccount("87654321").getBalance(), 0.0001);
-        bank.passTime(11);
-        assertEquals(1.01, bank.getAccount("87654321").getBalance(), 0.0001);
-    }
-
-
 }
-

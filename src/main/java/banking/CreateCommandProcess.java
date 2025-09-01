@@ -12,20 +12,14 @@ public class CreateCommandProcess extends CommandProcess {
 
     @Override
     public void processTokens(String[] tokens) {
-        String type = tokens[1].toLowerCase();
-        String id = tokens[2];
+        String accountType = tokens[1];
+        String accountId = tokens[2];
         double apr = Double.parseDouble(tokens[3]);
-        if (type.equals("checking")) {
-            bank.addAccount(new Checkings(id, apr));
-            return;
-        }
-        if (type.equals("savings")) {
-            bank.addAccount(new Savings(id, apr));
-            return;
-        }
-        if (type.equals("cd")) {
-            double open = Double.parseDouble(tokens[4]);
-            bank.addAccount(new CD(id, apr, open));
+        if (tokens.length == 5) {
+            double openingBalance = Double.parseDouble(tokens[4]);
+            bank.addAccount(accountType, accountId, apr, openingBalance);
+        } else {
+            bank.addAccount(accountType, accountId, apr);
         }
     }
 }

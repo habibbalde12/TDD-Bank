@@ -5,24 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MasterControl {
+    private final Bank bank;
     private final List<CommandValidator> validators;
-    private final CommandProcess commandProcess;
-    private final CommandStorer commandStorer;
-
-    public MasterControl(CommandValidator createValidator,
-                         CommandValidator depositValidator,
-                         CommandValidator withdrawValidator,
-                         CommandValidator transferValidator,
-                         CommandValidator passTimeValidator,
-                         CommandProcess commandProcess,
-                         CommandStorer commandStorer) {
-        this.validators = new ArrayList<>(Arrays.asList(
-                createValidator, depositValidator, withdrawValidator, transferValidator, passTimeValidator));
-        this.commandProcess = commandProcess;
-        this.commandStorer = commandStorer;
-    }
+    private final CommandProcess processor;
+    private final CommandStorer storer;
+    private final Output output;
 
     public MasterControl(Bank bank) {
+        this.bank = bank;
         this.validators = new ArrayList<>(Arrays.asList(
                 new CreateValidator(bank),
                 new DepositValidator(bank),
@@ -30,30 +20,44 @@ public class MasterControl {
                 new TransferCommandValidator(bank),
                 new PassTimeCommandValidator(bank)
         ));
-        this.commandProcess = new CommandProcess(bank);
-        this.commandStorer = new CommandStorer();
+        this.processor = new CommandProcess(bank, true);
+        this.storer = new CommandStorer();
+        this.output = new Output();
     }
 
     public List<String> start(List<String> input) {
-        commandStorer.clear();
+        storer.clear();
         if (input == null) {
-            return commandStorer.getInvalid();
+            List<String> result = new ArrayList<>();
+            result.addAll(output.print(bank));
+            result.addAll(storer.getInvalid());
+            return result;
         }
         for (String line : input) {
-            boolean valid = false;
+            if (line == null || line.isBlank()) {
+                continue;
+            }
+            String[] tokens = line.trim().split("\\s+");
+            String type = tokens[0].toLowerCase();
+            boolean supported = false;
             for (CommandValidator v : validators) {
-                if (v.validate(line)) {
-                    valid = true;
+                if (v.supports(type)) {
+                    supported = true;
+                    if (v.validate(tokens)) {
+                        processor.process(line);
+                    } else {
+                        storer.storeInvalid(line);
+                    }
                     break;
                 }
             }
-            if (!valid) {
-                commandStorer.storeInvalid(line);
-                continue;
+            if (!supported) {
+                storer.storeInvalid(line);
             }
-            commandProcess.process(line);
         }
-        return commandStorer.getInvalid();
+        List<String> result = new ArrayList<>();
+        result.addAll(output.print(bank));
+        result.addAll(storer.getInvalid());
+        return result;
     }
 }
-

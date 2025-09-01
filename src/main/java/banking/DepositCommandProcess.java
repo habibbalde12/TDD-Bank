@@ -12,9 +12,9 @@ public class DepositCommandProcess extends CommandProcess {
 
     @Override
     public void processTokens(String[] tokens) {
-        String accountIdentifier = tokens[1];
-        double depositAmount = Double.parseDouble(tokens[2]);
-        bank.deposit(accountIdentifier, depositAmount);
+        String id = tokens[1];
+        double amount = Double.parseDouble(tokens[2]);
+        bank.deposit(id, amount);
+        bank.recordTransaction(id, String.join(" ", tokens));
     }
 }
-

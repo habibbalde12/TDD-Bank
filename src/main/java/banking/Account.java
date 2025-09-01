@@ -4,6 +4,7 @@ public abstract class Account {
 	protected String id;
 	protected double balance;
 	protected double apr;
+	protected int ageMonths = 0;
 
 	public Account(String id, double apr) {
 		this.id = id;
@@ -23,13 +24,27 @@ public abstract class Account {
 		return apr;
 	}
 
+	public int getAgeMonths() {
+		return ageMonths;
+	}
+
+	public abstract String getTypeLabel();
+
+	public void onMonthTick() {
+		ageMonths++;
+	}
+
 	public void deposit(double amount) {
-		if (amount <= 0) return;
+		if (amount < 0) {
+			return;
+		}
 		balance += amount;
 	}
 
 	public void withdraw(double amount) {
-		if (amount <= 0) return;
+		if (amount < 0) {
+			return;
+		}
 		balance = Math.max(0.0, balance - amount);
 	}
 

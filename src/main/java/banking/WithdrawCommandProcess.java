@@ -15,7 +15,6 @@ public class WithdrawCommandProcess extends CommandProcess {
         String id = tokens[1];
         double amount = Double.parseDouble(tokens[2]);
         bank.withdraw(id, amount);
+        bank.recordTransaction(id, String.join(" ", tokens));
     }
 }
-
-

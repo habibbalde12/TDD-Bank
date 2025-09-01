@@ -7,10 +7,7 @@ public class CreateValidator extends CommandValidator {
 
     @Override
     public boolean supports(String commandType) {
-        if ("create".equalsIgnoreCase(commandType)) {
-            return true;
-        }
-        return false;
+        return "create".equalsIgnoreCase(commandType);
     }
 
     @Override
@@ -24,11 +21,9 @@ public class CreateValidator extends CommandValidator {
         if (!supports(tokens[0])) {
             return false;
         }
-
         String type = tokens[1].toLowerCase();
         String id = tokens[2];
         String apr = tokens[3];
-
         if (!type.equals("checking") && !type.equals("savings") && !type.equals("cd")) {
             return false;
         }
@@ -41,7 +36,6 @@ public class CreateValidator extends CommandValidator {
         if (!validInterestRate(apr)) {
             return false;
         }
-
         if (type.equals("cd")) {
             if (tokens.length != 5) {
                 return false;
@@ -56,19 +50,15 @@ public class CreateValidator extends CommandValidator {
             }
             return true;
         }
+        return tokens.length == 4;
+    }
 
-        if (tokens.length != 4) {
+    @Override
+    protected boolean validInterestRate(String s) {
+        if (!isPlainDecimal(s)) {
             return false;
         }
-        return true;
+        double v = Double.parseDouble(s);
+        return v > 0.0 && v <= 10.0;
     }
 }
-
-
-
-
-
-
-
-
-

@@ -14,8 +14,7 @@ public class TransferCommandProcess extends CommandProcess {
     public void processTokens(String[] tokens) {
         String fromId = tokens[1];
         String toId = tokens[2];
-        double amount = Double.parseDouble(tokens[3]);
-        bank.transfer(fromId, toId, amount);
+        double requested = Double.parseDouble(tokens[3]);
+        bank.transfer(fromId, toId, requested, String.join(" ", tokens));
     }
 }
-

@@ -5,5 +5,9 @@ public class CD extends Account {
         super(id, apr);
         this.balance = initialBalance;
     }
-}
 
+    @Override
+    public String getTypeLabel() {
+        return "Cd";
+    }
+}

@@ -14,14 +14,7 @@ public class MasterControlTest {
     void setUp() {
         input = new ArrayList<>();
         Bank bank = new Bank();
-        CommandValidator createValidator = new CreateValidator(bank);
-        CommandValidator depositValidator = new DepositValidator(bank);
-        CommandValidator withdrawValidator = new WithdrawCommandValidator(bank);
-        CommandValidator transferValidator = new TransferCommandValidator(bank);
-        CommandValidator passTimeValidator = new PassTimeCommandValidator(bank);
-        CommandProcess commandProcess = new CommandProcess(bank);
-        CommandStorer commandStorer = new CommandStorer();
-        masterControl = new MasterControl(createValidator, depositValidator, withdrawValidator, transferValidator, passTimeValidator, commandProcess, commandStorer);
+        masterControl = new MasterControl(bank);
     }
 
     private void assertSingleInvalid(String command, List<String> actual) {
@@ -42,6 +35,7 @@ public class MasterControlTest {
         List<String> actual = masterControl.start(input);
         assertEquals(0, actual.size());
     }
+
     @Test
     void sample_make_sure_this_passes_unchanged_or_you_will_fail() {
         input.add("Create savings 12345678 0.6");
@@ -54,6 +48,11 @@ public class MasterControlTest {
         input.add("Create cd 23456789 1.2 2000");
         List<String> actual = masterControl.start(input);
 
+        System.out.println("Actual output (" + actual.size() + " lines):");
+        for (int i = 0; i < actual.size(); i++) {
+            System.out.println(i + ": '" + actual.get(i) + "'");
+        }
+
         assertEquals(5, actual.size());
         assertEquals("Savings 12345678 1000.50 0.60", actual.get(0));
         assertEquals("Deposit 12345678 700", actual.get(1));
@@ -62,7 +61,6 @@ public class MasterControlTest {
         assertEquals("Deposit 12345678 5000", actual.get(4));
     }
 }
-
 
 
 

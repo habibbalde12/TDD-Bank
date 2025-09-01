@@ -8,7 +8,6 @@ public abstract class CommandValidator {
     }
 
     public abstract boolean supports(String commandType);
-
     public abstract boolean validate(String[] tokens);
 
     public boolean validate(String command) {
@@ -44,21 +43,15 @@ public abstract class CommandValidator {
                     return false;
                 }
                 hasDecimal = true;
-            }
-            else if (c == 'e' || c == 'E') {
+            } else if (c == 'e' || c == 'E' || c == '+' || c == '-') {
                 return false;
-            }
-            else if (Character.isDigit(c)) {
+            } else if (Character.isDigit(c)) {
                 hasDigit = true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
-        if (!hasDigit) {
-            return false;
-        }
-        return true;
+        return hasDigit;
     }
 
     protected boolean validInterestRate(String s) {
@@ -66,10 +59,7 @@ public abstract class CommandValidator {
             return false;
         }
         double v = Double.parseDouble(s);
-        if (v < 0.0 || v > 1.0) {
-            return false;
-        }
-        return true;
+        return v >= 0.0 && v <= 10.0;
     }
 
     protected boolean isValidAmount(String s) {
@@ -77,15 +67,6 @@ public abstract class CommandValidator {
             return false;
         }
         double v = Double.parseDouble(s);
-        if (v < 0.0) {
-            return false;
-        }
-        return true;
+        return v >= 0.0;
     }
 }
-
-
-
-
-
-
